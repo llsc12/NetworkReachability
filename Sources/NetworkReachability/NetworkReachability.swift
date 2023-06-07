@@ -1,4 +1,3 @@
-//import SystemConfiguration
 import Network
 import Foundation
 
@@ -8,8 +7,8 @@ public extension Notification.Name {
 
 public class NetworkReachability {
 	
-	public typealias NetworkReachable = (NetworkReachability) -> ()
-	public typealias NetworkUnreachable = (NetworkReachability) -> ()
+	public typealias NetworkReachable = (Reachability) -> ()
+	public typealias NetworkUnreachable = (Reachability) -> ()
 	
 	public enum Connection: CustomStringConvertible {
 		case unavailable, wifi, cellular, wired
@@ -82,6 +81,10 @@ public class NetworkReachability {
 		self.reachabilitySerialQueue = DispatchQueue(label: "com.llsc12.NetworkReachability", qos: queueQoS, target: targetQueue)
 		self.notificationQueue = notificationQueue
 		self.path = nil
+		
+		self.monitor.pathUpdateHandler = { path in
+			self.path = path
+		}
 	}
 	
 	deinit {
